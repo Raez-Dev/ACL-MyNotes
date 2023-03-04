@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="8dp"
+    >
+
+    <EditText
+        android:id="@+id/edt_title"
+        android:hint="Note Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textSize="18sp"
+        ></EditText>
+
+    <EditText
+        android:id="@+id/edt_description"
+        android:hint="Note Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textSize="18sp"
+        ></EditText>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        android:background="@color/design_default_color_secondary"
+        android:text="Save"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        >
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+</LinearLayout>

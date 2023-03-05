@@ -1,4 +1,4 @@
-package com.raezcorp.mynotes
+package com.raezcorp.mynotes.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.raezcorp.mynotes.Note
+import com.raezcorp.mynotes.R
 import com.raezcorp.mynotes.databinding.NoteItemBinding
 
 class NotesAdapter(

@@ -1,6 +1,7 @@
 package com.raezcorp.mynotes
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Database(entities = [Note::class], version = 1)
 abstract class NotesDatabase : RoomDatabase(){
@@ -10,7 +11,7 @@ abstract class NotesDatabase : RoomDatabase(){
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM note")
-    suspend fun getAll():List<Note>
+    fun getAll(): Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE id = :id")
     suspend fun getById(id:Int):Note?

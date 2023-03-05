@@ -1,4 +1,4 @@
-package com.raezcorp.mynotes.main
+package com.raezcorp.mynotes.ui.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ import com.raezcorp.mynotes.databinding.NoteItemBinding
 class NotesAdapter(
     private val onNoteClick:(Note) -> Unit,
     private val onNoteDelete:(Note) -> Unit
-    ):ListAdapter<Note,NoteViewHolder>(NoteDiffCallback()) {
+    ):ListAdapter<Note, NoteViewHolder>(NoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item,parent,false)

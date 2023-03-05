@@ -1,4 +1,4 @@
-package com.raezcorp.mynotes.detail
+package com.raezcorp.mynotes.ui.detail
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,13 +7,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.raezcorp.mynotes.Note
 import com.raezcorp.mynotes.NotesApplication
-import com.raezcorp.mynotes.NotesDatabase
+import com.raezcorp.mynotes.data.NotesRepository
 import com.raezcorp.mynotes.databinding.ActivityDetailBinding
-import com.raezcorp.mynotes.main.MainViewModel
-import com.raezcorp.mynotes.main.MainViewModelFactory
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
@@ -21,7 +17,7 @@ class DetailActivity : AppCompatActivity() {
     // Access to View Model with Singleton pattern inside
     private val vm by viewModels<DetailViewModel> {
         DetailViewModelFactory(
-            (application as NotesApplication).notesDatabase,
+            NotesRepository((application as NotesApplication).notesDatabase.notesDao()),
             intent.getIntExtra(EXTRA_NOTE_ID,-1)
         )
     }

@@ -1,4 +1,4 @@
-package com.raezcorp.mynotes.main
+package com.raezcorp.mynotes.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,11 +6,10 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.raezcorp.mynotes.detail.DetailActivity
+import com.raezcorp.mynotes.ui.detail.DetailActivity
 import com.raezcorp.mynotes.NotesApplication
-import com.raezcorp.mynotes.NotesDatabase
+import com.raezcorp.mynotes.data.NotesRepository
 import com.raezcorp.mynotes.databinding.ActivityMainBinding
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -20,9 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     // Access to View Model with Singleton pattern inside
     private val vm by viewModels<MainViewModel> {
-        MainViewModelFactory(
-            (application as NotesApplication).notesDatabase
-        )
+        val notesDatabase = (application as NotesApplication).notesDatabase
+        MainViewModelFactory(NotesRepository(notesDatabase.notesDao()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(root)
             notesAdapter = NotesAdapter(
-                onNoteClick = {DetailActivity.navigate(this@MainActivity,it.id)},
-                onNoteDelete = {vm.onNoteDelete(it)}
+                onNoteClick = { DetailActivity.navigate(this@MainActivity, it.id) },
+                onNoteDelete = { vm.onNoteDelete(it) }
             )
             recyclerView.adapter = notesAdapter
             fab.setOnClickListener {
@@ -40,8 +38,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED){
-                    vm.state.collect{
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    vm.state.collect {
                         notesAdapter.submitList(it)
                     }
                 }

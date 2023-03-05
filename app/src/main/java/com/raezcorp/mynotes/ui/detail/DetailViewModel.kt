@@ -1,6 +1,5 @@
 package com.raezcorp.mynotes.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raezcorp.mynotes.Note
@@ -17,12 +16,11 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val getNoteByIdUseCase: GetNoteByIdUseCase,
     private val saveNoteUseCase: SaveNoteUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val noteId:Int
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(Note(0, "", ""))
     val state: StateFlow<Note> = _state.asStateFlow()
-    private val noteId = requireNotNull(savedStateHandle.get<Int>(DetailActivity.EXTRA_NOTE_ID))
 
     init {
         viewModelScope.launch {

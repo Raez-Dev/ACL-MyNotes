@@ -12,6 +12,8 @@ import com.raezcorp.mynotes.data.INotesLocalDataSource
 import com.raezcorp.mynotes.data.NotesRepository
 import com.raezcorp.mynotes.data.NotesRoomDataSource
 import com.raezcorp.mynotes.databinding.ActivityMainBinding
+import com.raezcorp.mynotes.domain.DeleteNoteUseCase
+import com.raezcorp.mynotes.domain.GetCurrentNotesUseCase
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +25,11 @@ class MainActivity : AppCompatActivity() {
     private val vm by viewModels<MainViewModel> {
         val notesDatabase = (application as NotesApplication).notesDatabase
         val notesDataSource: INotesLocalDataSource = NotesRoomDataSource(notesDatabase.notesDao())
-        MainViewModelFactory(NotesRepository(notesDataSource))
+        val notesRepository = NotesRepository(notesDataSource)
+        val getCurrentNotesUseCase = GetCurrentNotesUseCase(notesRepository)
+        val deleteNoteUseCase  = DeleteNoteUseCase (notesRepository)
+
+        MainViewModelFactory(getCurrentNotesUseCase, deleteNoteUseCase )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

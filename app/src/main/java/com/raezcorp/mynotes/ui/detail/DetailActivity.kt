@@ -12,6 +12,8 @@ import com.raezcorp.mynotes.data.INotesLocalDataSource
 import com.raezcorp.mynotes.data.NotesRepository
 import com.raezcorp.mynotes.data.NotesRoomDataSource
 import com.raezcorp.mynotes.databinding.ActivityDetailBinding
+import com.raezcorp.mynotes.domain.GetNoteByIdUseCase
+import com.raezcorp.mynotes.domain.SaveNoteUseCase
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
@@ -21,8 +23,13 @@ class DetailActivity : AppCompatActivity() {
         val noteId = intent.getIntExtra(EXTRA_NOTE_ID,-1)
         val notesDatabase = (application as NotesApplication).notesDatabase
         val notesDataSource: INotesLocalDataSource = NotesRoomDataSource(notesDatabase.notesDao())
+        val notesRepository = NotesRepository(notesDataSource)
+        val getNoteByIdUseCase  = GetNoteByIdUseCase(notesRepository)
+        val saveNoteUseCase  = SaveNoteUseCase (notesRepository)
+
         DetailViewModelFactory(
-            NotesRepository(notesDataSource),
+            getNoteByIdUseCase ,
+            saveNoteUseCase,
             noteId
         )
     }

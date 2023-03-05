@@ -2,23 +2,29 @@ package com.raezcorp.mynotes.ui.main
 
 import androidx.lifecycle.*
 import com.raezcorp.mynotes.Note
-import com.raezcorp.mynotes.NotesDatabase
-import com.raezcorp.mynotes.data.NotesRepository
+import com.raezcorp.mynotes.domain.DeleteNoteUseCase
+import com.raezcorp.mynotes.domain.GetCurrentNotesUseCase
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val notesRepository: NotesRepository) : ViewModel() {
+class MainViewModel(
+    getCurrentNotesUseCase: GetCurrentNotesUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase
+) : ViewModel() {
 
-    val state= notesRepository.currentNotes
+    val state= getCurrentNotesUseCase()
 
     fun onNoteDelete(it: Note) {
         viewModelScope.launch {
-            notesRepository.delete(it)
+            deleteNoteUseCase(it)
         }
     }
 }
 
-class MainViewModelFactory(private val notesRepository: NotesRepository):ViewModelProvider.Factory{
+class MainViewModelFactory(
+    private val getCurrentNotesUseCase: GetCurrentNotesUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase
+):ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(notesRepository) as T
+        return MainViewModel(getCurrentNotesUseCase,deleteNoteUseCase) as T
     }
 }

@@ -8,7 +8,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.raezcorp.mynotes.NotesApplication
+import com.raezcorp.mynotes.data.INotesLocalDataSource
 import com.raezcorp.mynotes.data.NotesRepository
+import com.raezcorp.mynotes.data.NotesRoomDataSource
 import com.raezcorp.mynotes.databinding.ActivityDetailBinding
 import kotlinx.coroutines.launch
 
@@ -16,9 +18,12 @@ class DetailActivity : AppCompatActivity() {
 
     // Access to View Model with Singleton pattern inside
     private val vm by viewModels<DetailViewModel> {
+        val noteId = intent.getIntExtra(EXTRA_NOTE_ID,-1)
+        val notesDatabase = (application as NotesApplication).notesDatabase
+        val notesDataSource: INotesLocalDataSource = NotesRoomDataSource(notesDatabase.notesDao())
         DetailViewModelFactory(
-            NotesRepository((application as NotesApplication).notesDatabase.notesDao()),
-            intent.getIntExtra(EXTRA_NOTE_ID,-1)
+            NotesRepository(notesDataSource),
+            noteId
         )
     }
 

@@ -8,7 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.raezcorp.mynotes.ui.detail.DetailActivity
 import com.raezcorp.mynotes.NotesApplication
+import com.raezcorp.mynotes.data.INotesLocalDataSource
 import com.raezcorp.mynotes.data.NotesRepository
+import com.raezcorp.mynotes.data.NotesRoomDataSource
 import com.raezcorp.mynotes.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 
@@ -20,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     // Access to View Model with Singleton pattern inside
     private val vm by viewModels<MainViewModel> {
         val notesDatabase = (application as NotesApplication).notesDatabase
-        MainViewModelFactory(NotesRepository(notesDatabase.notesDao()))
+        val notesDataSource: INotesLocalDataSource = NotesRoomDataSource(notesDatabase.notesDao())
+        MainViewModelFactory(NotesRepository(notesDataSource))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

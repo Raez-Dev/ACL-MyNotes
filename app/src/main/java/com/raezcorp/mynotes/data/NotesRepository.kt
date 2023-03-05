@@ -2,8 +2,9 @@ package com.raezcorp.mynotes.data
 
 import com.raezcorp.mynotes.Note
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class NotesRepository(private val notesDataSource: INotesLocalDataSource) {
+class NotesRepository @Inject constructor(private val notesDataSource: INotesLocalDataSource) {
     val currentNotes : Flow<List<Note>> = notesDataSource.currentNotes
 
     suspend fun delete( note:Note) = notesDataSource.delete(note)

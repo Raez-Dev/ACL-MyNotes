@@ -1,30 +1,33 @@
 package com.raezcorp.mynotes.ui.detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.raezcorp.mynotes.Note
-import com.raezcorp.mynotes.NotesDatabase
-import com.raezcorp.mynotes.data.NotesRepository
 import com.raezcorp.mynotes.domain.GetNoteByIdUseCase
 import com.raezcorp.mynotes.domain.SaveNoteUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel (
+@HiltViewModel
+class DetailViewModel @Inject constructor(
     private val getNoteByIdUseCase: GetNoteByIdUseCase,
     private val saveNoteUseCase: SaveNoteUseCase,
-    private val noteId : Int = 0) : ViewModel() {
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    private val _state = MutableStateFlow(Note(0,"",""))
+    private val _state = MutableStateFlow(Note(0, "", ""))
     val state: StateFlow<Note> = _state.asStateFlow()
+    private val noteId = requireNotNull(savedStateHandle.get<Int>(DetailActivity.EXTRA_NOTE_ID))
 
     init {
         viewModelScope.launch {
             val note = getNoteByIdUseCase(noteId)
-            if (note != null){
+            if (note != null) {
                 _state.value = note
             }
         }
@@ -35,12 +38,5 @@ class DetailViewModel (
             val note = _state.value.copy(title = title, description = description)
             saveNoteUseCase(note)
         }
-    }
-}
-
-class DetailViewModelFactory(private val getNoteByIdUseCase: GetNoteByIdUseCase,
-                             private val saveNoteUseCase: SaveNoteUseCase,private val noteId : Int ): ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(getNoteByIdUseCase , saveNoteUseCase,noteId) as T
     }
 }

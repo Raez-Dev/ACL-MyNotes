@@ -4,9 +4,12 @@ import androidx.lifecycle.*
 import com.raezcorp.mynotes.Note
 import com.raezcorp.mynotes.domain.DeleteNoteUseCase
 import com.raezcorp.mynotes.domain.GetCurrentNotesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     getCurrentNotesUseCase: GetCurrentNotesUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase
 ) : ViewModel() {
@@ -17,14 +20,5 @@ class MainViewModel(
         viewModelScope.launch {
             deleteNoteUseCase(it)
         }
-    }
-}
-
-class MainViewModelFactory(
-    private val getCurrentNotesUseCase: GetCurrentNotesUseCase,
-    private val deleteNoteUseCase: DeleteNoteUseCase
-):ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(getCurrentNotesUseCase,deleteNoteUseCase) as T
     }
 }

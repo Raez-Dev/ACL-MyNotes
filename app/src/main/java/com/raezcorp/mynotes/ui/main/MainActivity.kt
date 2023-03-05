@@ -7,30 +7,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.raezcorp.mynotes.ui.detail.DetailActivity
-import com.raezcorp.mynotes.NotesApplication
-import com.raezcorp.mynotes.data.INotesLocalDataSource
-import com.raezcorp.mynotes.data.NotesRepository
-import com.raezcorp.mynotes.data.NotesRoomDataSource
 import com.raezcorp.mynotes.databinding.ActivityMainBinding
-import com.raezcorp.mynotes.domain.DeleteNoteUseCase
-import com.raezcorp.mynotes.domain.GetCurrentNotesUseCase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var notesAdapter: NotesAdapter
 
     // Access to View Model with Singleton pattern inside
-    private val vm by viewModels<MainViewModel> {
-        val notesDatabase = (application as NotesApplication).notesDatabase
-        val notesDataSource: INotesLocalDataSource = NotesRoomDataSource(notesDatabase.notesDao())
-        val notesRepository = NotesRepository(notesDataSource)
-        val getCurrentNotesUseCase = GetCurrentNotesUseCase(notesRepository)
-        val deleteNoteUseCase  = DeleteNoteUseCase (notesRepository)
-
-        MainViewModelFactory(getCurrentNotesUseCase, deleteNoteUseCase )
-    }
+    private val vm by viewModels<MainViewModel> ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
